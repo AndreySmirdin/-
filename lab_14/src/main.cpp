@@ -1,63 +1,56 @@
 #include <string>
 #include <fstream>
 #include <iostream>
-#include "../include/matrix.h"
-
-using namespace std;
+#include "matrix.h"
 
 
 int main() {
-    Matrix regs[10];
-    string cmd;
+    Matrix *regs = new Matrix[10];
+    std::string cmd;
     int reg1, reg2;
     char dollar;
 
-    while (cin >> cmd) {
-        if (cmd == "exit")
-            break;
+    while (std::cin >> cmd) {
+        try {
+            if (cmd == "exit")
+                break;
 
-        else if (cmd == "load") {
-            string fname;
-            cin >> dollar >> reg1 >> fname;
-            ifstream fin(fname.c_str());
-            fin >> regs[reg1];
-            fin.close();
-        }
+            else if (cmd == "load") {
+                std::string fname;
+                std::cin >> dollar >> reg1 >> fname;
+                std::ifstream fin(fname.c_str());
+                fin >> regs[reg1];
+                fin.close();
+            }
 
-        else if (cmd == "print"){
-            cin >> dollar >> reg1;
-            cout << regs[reg1];
-        }
+            else if (cmd == "print") {
+                std::cin >> dollar >> reg1;
+                std::cout << regs[reg1];
+            }
 
-        else if (cmd == "add"){
-            cin >> dollar >> reg1 >> dollar >> reg2;
-            try {
+            else if (cmd == "add") {
+                std::cin >> dollar >> reg1 >> dollar >> reg2;
                 regs[reg1] += regs[reg2];
             }
-            catch (MatrixException e) {
-                cout << e;
-            }
-        }
 
-        else if (cmd == "mul"){
-            cin >> dollar >> reg1 >> dollar >> reg2;
-            try {
+            else if (cmd == "mul") {
+                std::cin >> dollar >> reg1 >> dollar >> reg2;
                 regs[reg1] *= regs[reg2];
             }
-            catch (MatrixException e) {
-                cout << e;
+
+            else if (cmd == "elem") {
+                int i, j;
+                std::cin >> dollar >> reg1 >> i >> j;
+                std::cout << regs[reg1].get(i, j);
+
             }
         }
 
-        else if (cmd == "elem"){
-            int i, j;
-            cin >> dollar >> reg1 >> i >> j;
-            try {
-                cout << regs[reg1].get(i, j);
-            }
-            catch (MatrixException e) {
-                cout << e;
-            }
+        catch (MatrixException e) {
+            std::cout << e.what();
         }
     }
+
+    delete[] regs;
+    return 0;
 }

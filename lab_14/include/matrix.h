@@ -10,15 +10,15 @@ public:
     Matrix();
     Matrix(std::size_t r, std::size_t c);
     Matrix(const Matrix& m);
-
+    ~Matrix();
 
     std::size_t get_rows() const;
     std::size_t get_cols() const;
+
     void set(std::size_t i, std::size_t j, int val);
     int  get (std::size_t i, std::size_t j) const;
 
     Matrix operator=(const Matrix& m);
-    Matrix operator+(const Matrix& m) const;
 
     Matrix& operator+=(const Matrix& m);
     Matrix& operator*=(const Matrix& m);
@@ -29,15 +29,15 @@ private:
     int **_data;
 };
 
+
 std::ostream &operator<<(std::ostream &os, const Matrix &m);
 std::ifstream& operator>>(std::ifstream& fis, Matrix& m);
 
 
-class MatrixException{
+
+class MatrixException : public std::logic_error{
 public:
-    std::string _message;
-    MatrixException(std::string msg) : _message(msg){};
+    MatrixException(std::string msg) : logic_error(msg){};
 };
 
-std::ostream &operator<<(std::ostream &os, const MatrixException &e);
 #endif //MATRIX_MATRIX_H
