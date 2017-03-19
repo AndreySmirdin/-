@@ -1,5 +1,6 @@
 #include <iostream>
-#include "../include/matrix.h"
+#include "matrix.h"
+
 
 Matrix::Matrix() : _rows(0), _cols(0) {
     _data = NULL;
@@ -10,6 +11,7 @@ Matrix::Matrix(std::size_t r, std::size_t c) {
     _rows = r;
     _cols = c;
     _data = new int*[_rows];
+    
     for (size_t i = 0; i < _rows; i++)
         _data[i] = new int[_cols];
 
@@ -23,6 +25,7 @@ Matrix::Matrix(const Matrix& m) {
     _rows = m._rows;
     _cols = m._cols;
     _data = new int*[_rows];
+    
     for (size_t i = 0; i < _rows; i++)
         _data[i] = new int[_cols];
 
@@ -62,6 +65,7 @@ Matrix Matrix::operator=(const Matrix& m) {
     std::swap(_cols, tmp._cols);
     std::swap(_rows, tmp._rows);
     std::swap(tmp._data, _data);
+    
     return *this;
 }
 
@@ -99,6 +103,7 @@ std::ostream &operator<<(std::ostream &os, const Matrix &m) {
             os << m.get(i, j) << " ";
         os << "\n";
     }
+    
     return os;
 }
 

@@ -3,7 +3,6 @@
 #include <iostream>
 #include "matrix.h"
 
-
 int main() {
     Matrix *regs = new Matrix[10];
     std::string cmd;
@@ -41,13 +40,13 @@ int main() {
             else if (cmd == "elem") {
                 int i, j;
                 std::cin >> dollar >> reg1 >> i >> j;
-                std::cout << regs[reg1].get(i, j);
+                std::cout << regs[reg1].get(i, j) << "\n";
 
             }
         }
 
         catch (MatrixException e) {
-            std::cout << e.what();
+            std::cout << e.what() << "\n";
         }
     }
 
