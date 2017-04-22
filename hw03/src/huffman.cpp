@@ -129,7 +129,8 @@ void HuffmanEncoder::printEncodedFile() {
 
     char last_size = buffer.length();
     size_in_bits = output_size * 8;
-    if (last_size != 0){ // Some difficulties if we have from 1 to 7 bits left.
+    if (last_size != 0){ // If we have from 1 to 7 bits left let`s add 0 bits in the end.
+                         // Alse let`s store variable size_in_bits to decode the file.
         while (buffer.length() != 8)
             buffer += "0";
         byte = getByte(buffer);

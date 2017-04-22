@@ -10,8 +10,9 @@ public:
     void countFrequencies();
     void getCodes(); // Tests codes that we get from a tree.
     void printEncodedFile();
+    void printDecodedFile();
 
-    void encodeAndDecode(); // This test checks whole programm.
+    void encodeAndDecode(); // This test checks whole program.
 };
 
 #endif //HW03_HUFFMAN_TEST_H
