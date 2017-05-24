@@ -23,7 +23,7 @@ template<typename T>
 class enumerator {
 public:
     virtual T operator*() = 0; // Получает текущий элемент.
-    virtual void operator++() = 0;  // Переход к следующему элементу
+    virtual enumerator& operator++() = 0;  // Переход к следующему элементу
     virtual operator bool() const = 0;  // Возвращает true, если есть текущий элемент
 
     auto drop(int count) {
@@ -86,8 +86,9 @@ public:
         return *begin_;
     }
 
-    void operator++() {
+    range_enumerator& operator++() {
         begin_++;
+        return *this;
     }
 
     operator bool() const {
@@ -114,7 +115,10 @@ public:
 
     T operator*(){ return *parent_; }
 
-    void operator++() { ++parent_; }
+    drop_enumerator& operator++() {
+        ++parent_;
+        return *this;
+    }
 
     operator bool() const { return parent_; }
 
@@ -130,9 +134,10 @@ public:
 
     T operator*()  { return *parent_; }
 
-    void operator++() {
+    take_enumerator& operator++() {
         ++parent_;
         ++taken_;
+        return *this;
     }
 
     operator bool() const {
@@ -155,7 +160,10 @@ public:
         return func_(*parent_);
     }
 
-    void operator++() { ++parent_; }
+    select_enumerator& operator++() {
+        ++parent_;
+        return *this;
+    }
 
     operator bool() const { return parent_; }
 
@@ -164,6 +172,7 @@ private:
     F func_;
 };
 
+
 template<typename T, typename F>
 class until_enumerator : public enumerator<T> {
 public:
@@ -171,16 +180,19 @@ public:
 
     T operator*()  { return *parent_; }
 
-    void operator++() { ++parent_; }
+    until_enumerator& operator++() {
+        ++parent_;
+        return *this;
+    }
 
     operator bool() const {
         return parent_ && !predicate_(*parent_);
     }
-
 private:
     enumerator<T>& parent_;
     F predicate_;
 };
+
 
 template<typename T, typename F>
 class where_enumerator : public enumerator<T> {
@@ -192,14 +204,14 @@ public:
 
     T operator*()  { return *parent_; }
 
-    void operator++() {
+    where_enumerator& operator++() {
         ++parent_;
         while (parent_ && !predicate_(*parent_))
             ++parent_;
+        return *this;
     }
 
     operator bool() const { return parent_; }
-
 private:
     enumerator<T>& parent_;
     F predicate_;
