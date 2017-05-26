@@ -1,7 +1,4 @@
 #include <gtest/gtest.h>
-#include <vector>
-#include <type_traits>
-
 #include "linq.h"
 
 
@@ -87,7 +84,7 @@ TEST(select, factorial) {
     std::vector<int> ans = {1, 2, 6, 24, 120};
 
     std::vector<int> res = from(xs.begin(), xs.end())
-            .select(Factorial())
+            .select<int>(Factorial())
             .to_vector();
     ASSERT_EQ(res, ans);
 }
@@ -101,6 +98,25 @@ TEST(select, convert_to_bool) {
             .to_vector();
     ASSERT_EQ(res, ans);
 }
+template <class T>
+class My{
+public:
+    My() { x = 0; }
+    T x;
+    bool operator==(My<T> other) const { return x == other.x; }
+};
+
+TEST(select, my_class) {
+    My<int> my;
+    std::vector<My<int>> xs = {my, my, my};
+    std::vector<My<int>> ans = {my, my, my};
+
+    std::vector<My<int>> res = from(xs.begin(), xs.end())
+            .select<My<int>>([](My<int> i) { return i; })
+            .to_vector();
+    ASSERT_EQ(res, ans);
+}
+
 
 int main(int argc, char **argv) {
     testing::InitGoogleTest(&argc, argv);
